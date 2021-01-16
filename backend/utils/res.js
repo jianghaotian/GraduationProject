@@ -11,8 +11,34 @@ res.success = (ctx, data = {}) => {
   ctx.body = {
     code: 0,
     data,
-    detailMsg: '',
+    detailMsg: null,
     message: 'success',
+  };
+};
+
+/**
+ * 通用失败响应 - 400
+ */
+res.error = (ctx, { detailMsg = null, message = '服务器内部错误' }) => {
+  ctx.status = 400;
+  ctx.body = {
+    code: 400,
+    data: null,
+    detailMsg,
+    message,
+  };
+};
+
+/**
+ * 请求数据验证失败响应 - 400
+ */
+res.validatorErr = (ctx, detailMsg = null) => {
+  ctx.status = 400;
+  ctx.body = {
+    code: 422,
+    data: null,
+    detailMsg,
+    message: 'Validator ERROR',
   };
 };
 
@@ -30,19 +56,6 @@ res.notFoundErr = (ctx) => {
       host: ctx.host,
     },
     message: '404 Not Found',
-  };
-};
-
-/**
- * 请求数据验证失败响应 - 422
- */
-res.validatorErr = (ctx, detailMsg = 'validator error') => {
-  ctx.status = 422;
-  ctx.body = {
-    code: 422,
-    data: null,
-    detailMsg,
-    message: '服务器内部错误',
   };
 };
 

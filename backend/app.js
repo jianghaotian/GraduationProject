@@ -1,7 +1,7 @@
 const Koa = require('koa');
 const logger = require('koa-logger');
 const bodyparser = require('koa-bodyparser');
-const { res } = require('./utils');
+const res = require('./utils/res');
 
 const app = new Koa();
 

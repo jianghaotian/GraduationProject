@@ -10,6 +10,8 @@ const config = {
   baseURL: '/api/v1',
   // 验证码长度
   veriLen: 6,
+  // 验证码失效时间（单位：分钟）
+  veriTime: 5,
   // 密码长度
   pwdLen: [6, 20],
   // 引入数据库配置

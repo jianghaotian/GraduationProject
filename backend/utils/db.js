@@ -16,9 +16,9 @@ pool.on('error', (err) => {
 
 /**
  * 执行sql语句
- * @param {string} sql SQL语句
- * @param {string[]} data 传入SQL语句中的数据
- * @return {object} SQL语句的执行结果
+ * @param {String} sql SQL语句
+ * @param {String[]} data 传入SQL语句中的数据
+ * @return {Object} SQL语句的执行结果
  */
 const runSql = async (sql, data = []) => {
   const client = await pool.connect();
