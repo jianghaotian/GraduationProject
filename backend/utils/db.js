@@ -11,7 +11,7 @@ const pool = new pg.Pool(pgConfig);
 
 pool.on('error', (err) => {
   // eslint-disable-next-line no-console
-  console.log('数据库连接错误 - ', err);
+  console.error('数据库连接错误 - ', err);
 });
 
 /**

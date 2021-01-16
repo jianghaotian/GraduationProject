@@ -1,61 +1,65 @@
 /**
- * 构建响应内容
+ * 发送响应
  */
+const res = {};
 
-// 成功响应 - 200
-const genSuccess = (data = []) => ({
-  status: 200,
-  res: {
+/**
+ * 成功响应 - 200
+ */
+res.success = (ctx, data = {}) => {
+  ctx.status = 200;
+  ctx.body = {
     code: 0,
     data,
     detailMsg: '',
     message: 'success',
-  },
-});
+  };
+};
 
-// 通用失败响应 - 400
-// const genError = ({
-//   status = 400,
-//   code = -1,
-//   message = '服务器内部错误',
-//   detailMsg = '',
-// }) => ({
-//   status,
-//   res: {
-//     code,
-//     data: [],
-//     detailMsg,
-//     message,
-//   },
-// });
-
-//
-const genNotFoundErr = ({ path }) => ({
-  status: 404,
-  res: {
+/**
+ * Not Found - 404
+ */
+res.notFoundErr = (ctx) => {
+  ctx.status = 404;
+  ctx.body = {
     code: 404,
-    data: [],
+    data: null,
     detailMsg: {
-      path,
+      path: ctx.path,
+      method: ctx.method,
+      host: ctx.host,
     },
     message: '404 Not Found',
-  },
-});
+  };
+};
 
-// 请求数据验证失败响应 - 422
-const genValidatorErr = ({
-  message = '服务器内部错误',
-  errors,
-}) => ({
-  status: 422,
-  res: {
+/**
+ * 请求数据验证失败响应 - 422
+ */
+res.validatorErr = (ctx, detailMsg = 'validator error') => {
+  ctx.status = 422;
+  ctx.body = {
     code: 422,
-    data: [],
-    detailMsg: {
-      validator: errors,
-    },
-    message,
-  },
-});
+    data: null,
+    detailMsg,
+    message: '服务器内部错误',
+  };
+};
 
-module.exports = { genSuccess, genNotFoundErr, genValidatorErr };
+/**
+ * Internal Server Error - 500
+ */
+res.serverErr = (ctx, { name, message }) => {
+  ctx.status = 500;
+  ctx.body = {
+    code: 500,
+    data: null,
+    detailMsg: {
+      errorType: name,
+      message,
+    },
+    message: '服务器内部错误',
+  };
+};
+
+module.exports = res;
