@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const { jwtSecret, tokenExpiresTime } = require('../config');
+const { jwtConfig: { jwtSecret, tokenExpiresTime } } = require('../config');
 
 /**
  * 生成token

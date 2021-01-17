@@ -115,3 +115,7 @@ dist
 
 # End of https://www.toptal.com/developers/gitignore/api/node
 
+# Config Use Example
+/config/*.js
+!/config/index.js
+!/config/*.example.js
