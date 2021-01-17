@@ -40,8 +40,9 @@ const loginByVeriSchema = Joi.object({
  */
 const changeByVeriSchema = Joi.object({
   username,
-  password,
+  newPassword: password,
   verification,
+  type,
 });
 
 /**
@@ -51,6 +52,7 @@ const changePasswordSchema = Joi.object({
   username,
   password,
   newPassword: password,
+  type,
 });
 
 /**

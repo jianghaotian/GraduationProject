@@ -74,7 +74,7 @@ router.post('/change/verification', async (ctx) => {
 /**
  * 通过原密码修改密码
  */
-router.post('/change/password', async (ctx) => {
+router.post('/change', async (ctx) => {
   await genRouter({
     ctx,
     schema: changePasswordSchema,

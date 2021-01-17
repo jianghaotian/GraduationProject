@@ -14,6 +14,10 @@ const config = {
   veriTime: 5,
   // 密码长度
   pwdLen: [6, 20],
+  // jwt密钥
+  jwtSecret: 'XYxyjwtSecretByJHT',
+  // jwt过期时间（单位：秒）
+  tokenExpiresTime: 60 * 60 * 24 * 7, // 7天
   // 引入数据库配置
   pgConfig,
 };

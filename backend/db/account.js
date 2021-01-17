@@ -3,21 +3,17 @@
  */
 const { runSql } = require('../utils/db');
 
-/** SELECT verification
- * 根据邮箱/手机号、验证码查询生成时间
- * @param {String} username - 邮箱/手机号
- * @param {String} verification - 验证码
+/** INSERT verification
+ * verification表增加一条字段
  */
-const queryVeriTime = async ({ username, verification }) => {
-  const sql = 'SELECT time FROM xy.verification WHERE username = $1 AND verification = $2';
+const insertVeri = async ({ username, verification }) => {
+  const sql = 'INSERT INTO xy.verification (username, verification) VALUES ($1, $2)';
   const row = await runSql(sql, [username, verification]);
   return row;
 };
 
 /** DELETE verification
- * 根据邮箱/手机号、验证码删除记录
- * @param {String} username - 邮箱/手机号
- * @param {String} verification - 验证码
+ * 通过邮箱/手机号、验证码删除记录
  */
 const deleteVeri = async ({ username, verification }) => {
   const sql = 'DELETE FROM xy.verification WHERE username = $1 AND verification = $2';
@@ -25,25 +21,19 @@ const deleteVeri = async ({ username, verification }) => {
   return row;
 };
 
-/** SELECT user
- * 根据邮箱/手机号判断用户是否已经注册
- * @param {String} username - 邮箱/手机号
- * @param {String} type - email - 邮箱、phone - 手机号
+/** SELECT verification
+ * 通过邮箱/手机号、验证码查询生成时间
  */
-const queryUserRegister = async ({ username, type }) => {
-  const sql = `SELECT COUNT(*) FROM xy.user WHERE ${type} = $1`;
-  const row = await runSql(sql, [username]);
+const queryVeriTime = async ({ username, verification }) => {
+  const sql = 'SELECT time FROM xy.verification WHERE username = $1 AND verification = $2';
+  const row = await runSql(sql, [username, verification]);
   return row;
 };
 
 /** INSERT user
- * user表存储一条字段
- * @param {String} username - 邮箱/手机号
- * @param {String} password - 密码
- * @param {String} name - 用户名
- * @param {String} type - email - 邮箱、phone - 手机号
+ * user表增加一条字段
  */
-const insertUserByType = async ({
+const insertUser = async ({
   username, password, name, type,
 }) => {
   const sql = `INSERT INTO xy.user (${type}, password, name) VALUES ($1, $2, $3)`;
@@ -51,9 +41,39 @@ const insertUserByType = async ({
   return row;
 };
 
+/** UPDATE user
+ * 通过用户id修改密码
+ */
+const updatePwdById = async ({ id, newPassword }) => {
+  const sql = 'UPDATE xy.user SET password = $1 WHERE id = $2';
+  const row = await runSql(sql, [newPassword, id]);
+  return row;
+};
+
+/** SELECT user
+ * 通过邮箱/手机号查询用户id
+ */
+const queryUserId = async ({ username, type }) => {
+  const sql = `SELECT id FROM xy.user WHERE ${type} = $1`;
+  const row = await runSql(sql, [username]);
+  return row;
+};
+
+/** SELECT user
+ * 通过邮箱/手机号、密码查询用户id
+ */
+const queryUserIdByPwd = async ({ username, password, type }) => {
+  const sql = `SELECT id FROM xy.user WHERE ${type} = $1 AND password = $2`;
+  const row = await runSql(sql, [username, password]);
+  return row;
+};
+
 module.exports = {
-  queryVeriTime,
+  insertVeri,
   deleteVeri,
-  queryUserRegister,
-  insertUserByType,
+  queryVeriTime,
+  insertUser,
+  updatePwdById,
+  queryUserId,
+  queryUserIdByPwd,
 };
