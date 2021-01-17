@@ -5,8 +5,9 @@ const res = require('./utils/res');
 
 const app = new Koa();
 
-// 引入数据库
-require('./utils/db');
+// 应用程序初始化
+// eslint-disable-next-line no-console
+console.log('application initialization...');
 
 // 中间件
 app.use(logger());
@@ -17,9 +18,9 @@ app.use(async (ctx, next) => {
   try {
     await next();
   } catch (err) {
+    res.serverErr(ctx, err);
     // eslint-disable-next-line no-console
     console.error(err, ctx);
-    res.serverErr(ctx, err);
   }
   if (parseInt(ctx.status, 10) === 404) {
     res.notFoundErr(ctx);
@@ -31,6 +32,10 @@ const accountRoute = require('./routes/account');
 
 // 配置路由
 app.use(accountRoute.routes(), accountRoute.allowedMethods());
+
+// 应用程序初始化完成
+// eslint-disable-next-line no-console
+console.log('application initialization --- OK');
 
 // 错误处理
 app.on('error', (err, ctx) => {

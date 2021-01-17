@@ -12,6 +12,9 @@ const {
 } = require('../db/account');
 const { dateConverSceond, getNowSceond } = require('../utils/time');
 const { getJwt } = require('../utils/jwt');
+const getRandom = require('../utils/random');
+const sendEmail = require('../utils/email');
+const sendMsg = require('../utils/message');
 const { veriTime } = require('../config');
 
 /**
@@ -150,11 +153,20 @@ const changePassword = async ({
  * 邮箱/手机号获取验证码
  */
 const verification = async ({ username, type }) => {
-  const vericode = '123456';
   // 生成验证码
-
+  const vericode = getRandom(6);
   // 发送验证码
-
+  if (type === 'phone') {
+    // 发送短信
+    const result = await sendMsg({ sendTo: username, verification: vericode });
+    if (result.error === false) {
+      // 存储数据
+      await insertVeri({ username, verification: vericode });
+    }
+    return result;
+  }
+  // 发送邮件
+  await sendEmail({ sendTo: username, verification: vericode });
   // 存储数据
   await insertVeri({ username, verification: vericode });
   return { error: false };

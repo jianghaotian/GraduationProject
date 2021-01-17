@@ -1,5 +1,8 @@
 const dbConfig = require('./db');
 const jwtConfig = require('./jwt');
+const emailConfig = require('./email');
+const msgConfig = require('./message');
+
 /**
  * 项目配置
  */
@@ -18,6 +21,10 @@ const config = {
   dbConfig,
   // 引入 jwt 配置
   jwtConfig,
+  // 引入发送邮件配置
+  emailConfig,
+  // 引入发送短信配置
+  msgConfig,
 };
 
 module.exports = config;

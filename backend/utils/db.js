@@ -2,13 +2,16 @@
  * 操作数据库
  */
 const pg = require('pg');
-const { pgConfig } = require('../config');
+const { dbConfig } = require('../config');
 
 /**
  * 创建连接池
  */
-const pool = new pg.Pool(pgConfig);
+const pool = new pg.Pool(dbConfig);
+// eslint-disable-next-line no-console
+console.log('create database connection pool  --- OK');
 
+// 错误处理
 pool.on('error', (err) => {
   // eslint-disable-next-line no-console
   console.error('数据库连接错误 - ', err);
