@@ -29,9 +29,11 @@ app.use(async (ctx, next) => {
 
 // 引入路由
 const accountRoute = require('./routes/account');
+const userRoute = require('./routes/user');
 
 // 配置路由
 app.use(accountRoute.routes(), accountRoute.allowedMethods());
+app.use(userRoute.routes(), userRoute.allowedMethods());
 
 // 应用程序初始化完成
 // eslint-disable-next-line no-console

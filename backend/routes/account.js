@@ -1,5 +1,5 @@
 /**
- * 账号相关路由 - no JWT
+ * 路由 - 账号相关 - no JWT
  */
 const router = require('koa-router')();
 const { baseURL } = require('../config');

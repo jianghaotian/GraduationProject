@@ -13,9 +13,16 @@ const common = {
   // 验证码
   verification: Joi.string().trim().length(veriLen).required(),
   // 类型
-  type: Joi.string().valid('email', 'phone'),
+  type: Joi.string().valid('email', 'phone').required(),
   // 用户名
   name: Joi.string().trim().required(),
+  // 邮箱
+  email: Joi.string().trim().email().required(),
+  // 手机号
+  phone: Joi.string().trim().pattern(/^1[0-9]{10}$/, 'phone').required(),
+
+  // 字符串
+  string: Joi.string(),
 };
 
 module.exports = common;
