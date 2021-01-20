@@ -14,7 +14,8 @@ const genRouter = async ({
   if (details) {
     res.validatorErr(ctx, details);
   } else {
-    const result = await service(data);
+    // 存在 jwt 时发送用户id
+    const result = await service(data, ctx.state.jwt?.id);
     if (result.error) {
       res.error(ctx, result);
     } else {

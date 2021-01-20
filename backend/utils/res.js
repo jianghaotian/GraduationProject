@@ -43,6 +43,22 @@ res.validatorErr = (ctx, detailMsg = null) => {
 };
 
 /**
+ * 身份验证失败响应 - 401
+ */
+res.authenticationErr = (ctx, { name, message }) => {
+  ctx.status = 401;
+  ctx.body = {
+    code: 401,
+    data: null,
+    detailMsg: {
+      errorType: name,
+      message,
+    },
+    message: '身份验证失败！',
+  };
+};
+
+/**
  * Not Found - 404
  */
 res.notFoundErr = (ctx) => {

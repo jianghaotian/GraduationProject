@@ -8,8 +8,8 @@
 /**
  * 修改邮箱
  */
-const changeEmail = async (data) => {
-  console.log(data);
+const changeEmail = async (data, id) => {
+  console.log(data, id);
   return { error: false };
 };
 
