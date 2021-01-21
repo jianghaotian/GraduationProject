@@ -11,10 +11,6 @@ const app = new Koa();
 // eslint-disable-next-line no-console
 console.log('application initialization...');
 
-// 中间件
-app.use(logger());
-app.use(bodyparser({ enableTypes: ['json', 'form', 'text'] }));
-
 // 处理 401 404 500
 app.use(async (ctx, next) => {
   try {
@@ -34,6 +30,10 @@ app.use(async (ctx, next) => {
     res.notFoundErr(ctx);
   }
 });
+
+// 中间件
+app.use(logger());
+app.use(bodyparser({ enableTypes: ['json', 'form', 'text'] }));
 
 // koaJwt 忽略的url 正则表达式
 const jwtUnlessReg = new RegExp(`^${baseURL}/account`);

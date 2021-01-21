@@ -1,32 +1,50 @@
 /**
  * 服务 - 用户信息
  */
-// const {
-
-// } = require('../db/user');
+const { updateEmailById, updatePhoneById, queryUserById } = require('../db/user');
+const { deleteVeri } = require('../db/verification');
+const { judgeVeri } = require('./common/verification');
 
 /**
  * 修改邮箱
  */
-const changeEmail = async (data, id) => {
-  console.log(data, id);
+const changeEmail = async ({ email, verification }, id) => {
+  // 判断验证码是否合法
+  const veriResult = await judgeVeri({ username: email, verification });
+  if (veriResult.error) {
+    return veriResult;
+  }
+  // 修改邮箱
+  await updateEmailById({ id, email });
+  // 删除使用过的验证码
+  deleteVeri({ username: email, verification });
   return { error: false };
 };
 
 /**
  * 修改手机号
  */
-const changePhone = async (data) => {
-  console.log(data);
+const changePhone = async ({ phone, verification }, id) => {
+  // 判断验证码是否合法
+  const veriResult = await judgeVeri({ username: phone, verification });
+  if (veriResult.error) {
+    return veriResult;
+  }
+  // 修改手机号
+  await updatePhoneById({ id, phone });
+  // 删除使用过的验证码
+  deleteVeri({ username: phone, verification });
   return { error: false };
 };
 
 /**
  * 获取用户基本信息
  */
-const getInfo = async (data) => {
-  console.log(data);
-  return { error: false };
+const getInfo = async (_, id) => {
+  const data = await queryUserById({ id });
+  delete data[0].password;
+  // TODO create_time 早了8小时
+  return { error: false, data: data[0] };
 };
 
 /**

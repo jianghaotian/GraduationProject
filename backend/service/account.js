@@ -2,20 +2,20 @@
  * 服务 - 账号相关
  */
 const {
-  insertVeri,
-  deleteVeri,
-  queryVeriTime,
   insertUser,
   updatePwdById,
-  queryUserId,
+  queryUserIdByUsername,
   queryUserIdByPwd,
-} = require('../db/account');
-const { dateConverSceond, getNowSceond } = require('../utils/time');
+} = require('../db/user');
+const {
+  insertVeri,
+  deleteVeri,
+} = require('../db/verification');
+const { judgeVeri } = require('./common/verification');
 const { getJwt } = require('../utils/jwt');
 const getRandom = require('../utils/random');
 const sendEmail = require('../utils/email');
 const sendMsg = require('../utils/message');
-const { veriTime } = require('../config');
 
 /**
  * 用户注册
@@ -23,21 +23,13 @@ const { veriTime } = require('../config');
 const register = async ({
   username, password, verification, type, name,
 }) => {
-  // 查询验证码
-  const veriTimeRow = await queryVeriTime({ username, verification });
-  if (veriTimeRow.length === 0) {
-    // 验证码不存在
-    return { error: true, message: '验证码错误！' };
-  }
-  // 验证码生成时间和当前时间的时间差
-  const timeDiff = getNowSceond() - dateConverSceond(veriTimeRow[0].time);
-  if (timeDiff > veriTime * 60) {
-    // 验证码过期，删除过期的验证码
-    deleteVeri({ username, verification });
-    return { error: true, message: '验证码已过期，请重新获取验证码！' };
+  // 判断验证码是否合法
+  const veriResult = await judgeVeri({ username, verification });
+  if (veriResult.error) {
+    return veriResult;
   }
   // 判断用户是否已注册
-  const userRow = await queryUserId({ username, type });
+  const userRow = await queryUserIdByUsername({ username, type });
   if (userRow.length !== 0) {
     // 用户已注册
     return { error: true, message: '用户已注册！' };
@@ -71,21 +63,13 @@ const login = async ({ username, password, type }) => {
  * 邮箱/手机号、验证码登录
  */
 const loginByVerification = async ({ username, verification, type }) => {
-  // 查询验证码
-  const veriTimeRow = await queryVeriTime({ username, verification });
-  if (veriTimeRow.length === 0) {
-    // 验证码不存在
-    return { error: true, message: '验证码错误！' };
-  }
-  // 验证码生成时间和当前时间的时间差
-  const timeDiff = getNowSceond() - dateConverSceond(veriTimeRow[0].time);
-  if (timeDiff > veriTime * 60) {
-    // 验证码过期，删除过期的验证码
-    deleteVeri({ username, verification });
-    return { error: true, message: '验证码已过期，请重新获取验证码！' };
+  // 判断验证码是否合法
+  const veriResult = await judgeVeri({ username, verification });
+  if (veriResult.error) {
+    return veriResult;
   }
   // 判断用户是否已注册
-  const userRow = await queryUserId({ username, type });
+  const userRow = await queryUserIdByUsername({ username, type });
   if (userRow.length === 0) {
     // 用户未注册
     return { error: true, message: '用户未注册！' };
@@ -104,21 +88,13 @@ const loginByVerification = async ({ username, verification, type }) => {
 const changeByVerification = async ({
   username, newPassword, verification, type,
 }) => {
-  // 查询验证码
-  const veriTimeRow = await queryVeriTime({ username, verification });
-  if (veriTimeRow.length === 0) {
-    // 验证码不存在
-    return { error: true, message: '验证码错误！' };
-  }
-  // 验证码生成时间和当前时间的时间差
-  const timeDiff = getNowSceond() - dateConverSceond(veriTimeRow[0].time);
-  if (timeDiff > veriTime * 60) {
-    // 验证码过期，删除过期的验证码
-    deleteVeri({ username, verification });
-    return { error: true, message: '验证码已过期，请重新获取验证码！' };
+  // 判断验证码是否合法
+  const veriResult = await judgeVeri({ username, verification });
+  if (veriResult.error) {
+    return veriResult;
   }
   // 判断用户是否已注册
-  const userRow = await queryUserId({ username, type });
+  const userRow = await queryUserIdByUsername({ username, type });
   if (userRow.length === 0) {
     // 用户未注册
     return { error: true, message: '用户未注册！' };
