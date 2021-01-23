@@ -41,6 +41,15 @@ const updatePhoneById = async ({ id, phone }) => {
   return row;
 };
 
+/** UPDATE
+ * 通过用户id修改用户名
+ */
+const updateNameById = async ({ id, name }) => {
+  const sql = 'UPDATE xy.user SET name = $1 WHERE id = $2';
+  const row = await runSql(sql, [name, id]);
+  return row;
+};
+
 /** SELECT
  * 通过邮箱/手机号查询用户id
  */
@@ -73,6 +82,7 @@ module.exports = {
   updatePwdById,
   updateEmailById,
   updatePhoneById,
+  updateNameById,
   queryUserIdByUsername,
   queryUserIdByPwd,
   queryUserById,

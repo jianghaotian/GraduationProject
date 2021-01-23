@@ -1,7 +1,9 @@
 /**
  * 服务 - 用户信息
  */
-const { updateEmailById, updatePhoneById, queryUserById } = require('../db/user');
+const {
+  updateEmailById, updatePhoneById, updateNameById, queryUserById,
+} = require('../db/user');
 const { deleteVeri } = require('../db/verification');
 const { judgeVeri } = require('./common/verification');
 
@@ -50,8 +52,8 @@ const getInfo = async (_, id) => {
 /**
  * 修改用户基本信息
  */
-const changeInfo = async (data) => {
-  console.log(data);
+const changeInfo = async ({ name }, id) => {
+  await updateNameById({ id, name });
   return { error: false };
 };
 
@@ -66,8 +68,8 @@ const changeHead = async (data) => {
 /**
  * 搜索用户
  */
-const search = async (data) => {
-  console.log(data);
+const search = async ({ username }) => {
+  console.log(username);
   return { error: false };
 };
 
